@@ -1,0 +1,64 @@
+{
+  "study": "SealTrial",
+  "row": "TrialCount",
+  "run": "ExactRun",
+  "review": "TrialDecision",
+  "study_label": "试封方案",
+  "row_label": "工艺计数",
+  "field_label": "双侧精确比较",
+  "fields": [
+    [
+      "group",
+      "工艺组 (A/B)",
+      "text"
+    ],
+    [
+      "success",
+      "合格数",
+      "number"
+    ],
+    [
+      "failure",
+      "失败数",
+      "number"
+    ]
+  ],
+  "defaults": {
+    "alpha": 0.05
+  },
+  "names": [
+    "砚田·薄膜一轮",
+    "砚田·覆膜二轮",
+    "砚田·热封三轮"
+  ],
+  "note": "两组试件独立，组别预先固定。双侧 p 值是固定边际下概率不大于观察表的所有表之和。",
+  "accent": "58 0.13 30",
+  "dark": "31 0.04 244",
+  "bg": "95 0.016 230",
+  "id": "gb-0037",
+  "direction": "假设检验",
+  "title": "砚田包装试封比较席",
+  "slug": "seal-fisher",
+  "algorithm": "Fisher精确检验、Wilson单比例区间与率差",
+  "entities": "SealTrial / TrialCount / ExactRun / TrialDecision",
+  "scenario": "两种封口工艺独立合格/失败计数→固定方案比较→复试决策；双侧Fisher按概率不大于观测表求和",
+  "visual": "封样检验蓝图、砖红",
+  "oracle": "2×2固定边际对scipy fisher_exact；零格与计数非法拒绝",
+  "frontend": 18241,
+  "backend": 19241,
+  "db_port": 17741,
+  "database": "MySQL8",
+  "batch": 1,
+  "index": 1,
+  "roles": [
+    "admin",
+    "analyst",
+    "viewer"
+  ],
+  "states": [
+    "queued",
+    "running",
+    "completed",
+    "failed"
+  ]
+}
