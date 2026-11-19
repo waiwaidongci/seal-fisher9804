@@ -6,8 +6,10 @@ from src.config.domain import DOMAIN
 from src.models.user import User
 from src.models.study import Study
 from src.models.observation import Observation
+from src.models.stream import StreamRecord
 from src.models import run,review,audit
 from src.utils.security import hash_password
+from src.utils.serializers import now
 
 def seed():
     Base.metadata.create_all(engine)
@@ -37,6 +39,13 @@ def seed():
                 key=f'DEMO-{k+1}-{n+1:04}'
                 if not db.scalar(select(Observation.id).where(Observation.study_id==study.id,Observation.source_key==key)):
                     db.add(Observation(study_id=study.id,source_key=key,values=values))
+        demo_stream=[('一线','trial','REG-0001',1200,'pass'),('一线','leak','LK-0001',1500,'pass'),
+                     ('一线','trial','REG-0002',8200,'pass'),('一线','leak','LK-0002',8600,'fail'),
+                     ('一线','trial','REG-0003',15400,'fail'),('一线','leak','LK-0003',15900,'pass'),
+                     ('一线','trial','REG-0004',22800,'pass'),('一线','leak','LK-0004',60000,'pass')]
+        for line,stream,key,at,result in demo_stream:
+            if not db.scalar(select(StreamRecord.id).where(StreamRecord.line==line,StreamRecord.stream==stream,StreamRecord.source_key==key)):
+                db.add(StreamRecord(line=line,stream=stream,source_key=key,at_ms=at,result=result,created_at=now()))
         db.commit()
         counts={model.__tablename__:db.scalar(select(func.count()).select_from(model)) for model in (User,Study,Observation)}
         print(json.dumps(counts));return counts
